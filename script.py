@@ -5,15 +5,23 @@ from datetime import datetime, timedelta, timezone
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 
-parser.add_argument('date',  type=int, 
-                    help='jour avant')
+parser.add_argument('-c', '--config', type=str, help="Chemin du fichier de configuration")
+
+parser.add_argument('-db','--day-before',type=int)
+parser.add_argument('-dmax','--date-max',type=str)
+parser.add_argument('-dmin','--date-min',type=str)
 args = parser.parse_args()
 
-if args.date:
-    print("ok")
+
+# SET DES ARGUMENTS #
+if args.day_before:  
+    date = args.day_before
 else:
-    print("non")
-print(args.date)
+    date = 7
+
+
+
+    
 # permet de faire les small url 
 url = 'http://tinyurl.com/api-create.php?url='
 
@@ -43,7 +51,7 @@ for url in urls:
     print()
     print()
     date_today = datetime.now(timezone.utc)
-    date_two_days_ago = date_today - timedelta(days=args.date) 
+    date_two_days_ago = date_today - timedelta(days=date) 
 
     for entry in feedParser.entries:
         if 'published' in entry:
