@@ -31,11 +31,10 @@ class Database:
                 for article in articles:
                     id = article[0]
                     title = article[1]
-                    content = article[2]
-                    published_date = article[3]
+                    content = article[3]
+                    published_date = article[2]
                     
                     print(f"Title: {title}")
-                    print(f"Content: {content}")
                     print(f"Published Date: {published_date}")
                     print("-" * 20)
             except Error as e:

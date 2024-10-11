@@ -6,7 +6,7 @@ from database import Database
 database = Database()
 
 
-urls = database.chargeUrl()
+
 
 # permet de faire les small url 
 
@@ -61,22 +61,27 @@ parser = argparse.ArgumentParser(description='Process some integers.')
 
 parser.add_argument('-c', '--config', type=str, help="Chemin du fichier de configuration")
 
-parser.add_argument('-db','--day-before',type=int)
-parser.add_argument('-dmax','--date-max',type=str)
-parser.add_argument('-dmin','--date-min',type=str)
-parser.add_argument('-l', '--list-source', action='store_true', help="Liste les sources")
+parser.add_argument('-s','--source',type=int, help="Permet d'afficher toutes les sources")
+parser.add_argument('-r','--reload',type=int, help="Permet de rafraichir les données avant la réponse")
+parser.add_argument('-db','--day-before',type=int, help="Affiche les articles de N jour avant")
+parser.add_argument('-dmax','--date-max',type=str, help="Affiche les articles à partir du jour N (YYYY-MM-DD)")
+parser.add_argument('-dmin','--date-min',type=str , help="N'affiche pas les articles après le jour N (YYYY-MM-DD)")
 args = parser.parse_args()
 
 
 #################################
 # Gestion des arguments de date #
 #################################
-if args.list_source:
+urls = database.chargeUrl()
+if args.reload:
+    # Recherche des nouveaux articles....
+    includeNewArticle()
+
+if args.source:
     database.listSource()
     exit(1)
 
-# Recherche des nouveaux articles....
-includeNewArticle()
+
 date_start = ""
 date_end = ""
 if args.day_before:  
