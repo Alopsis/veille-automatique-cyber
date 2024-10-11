@@ -7,6 +7,5 @@ cyber = {
 
 
 
-class urlChecker:
-    arrayToReturn = {}
+class domain:
     def __init__(self,):

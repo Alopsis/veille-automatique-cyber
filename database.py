@@ -59,17 +59,41 @@ class Database:
                 print(f"Erreur lors de l'exécution de la requête {e}")
             finally:
                 cursor.close()
-    def addArticle(self, title,description,url,pub_date,domain):
-        print(domain)
+
+
+
+    def addArticle(self, title, description, url, pub_date, domain):
         if self.connection is not None and self.connection.is_connected():
             try:
                 cursor = self.connection.cursor()
-                cursor.execute(f"SELECT * FROM article where name = {title} and description = {description};")
+                query = "SELECT * FROM article WHERE name = %s AND description = %s;"
+                cursor.execute(query, (title, description))
                 elem = cursor.fetchone()
-                if elem:
-                    # on peut l'ajouter
-                    cursor.execute(f"INSERT INTO article ('name','description','date','domain','url') VALUES ({title} , {description}, {date}, {domain},{url})")            
+                if not elem:  
+                    insert_query = "INSERT INTO article (name, date, description, domain, url) VALUES (%s, %s, %s, %s, %s)"
+                    cursor.execute(insert_query, (title, pub_date.isoformat(), description, domain, url))
+                    self.connection.commit()  
+                else:
+                    print("L'article existe déjà.")
+
+            except Error as e:
+                print(f"Erreur lors de l'exécution de la requête : {e}")
+            finally:
+                cursor.close()
+
+
+
+    def chargeUrl(self):
+        domains = []
+        if self.connection is not None and self.connection.is_connected():
+            try:
+                cursor = self.connection.cursor()
+                cursor.execute(f"SELECT id,name FROM domain ")
+
+                for row in cursor.fetchall():  
+                    domains.append((row[0], row[1]))  
             except Error as e:
                 print(f"Erreur lors de l'exécution de la requête {e}")
             finally:
                 cursor.close()
+        return domains

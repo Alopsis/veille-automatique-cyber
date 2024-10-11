@@ -3,15 +3,12 @@ import requests
 import argparse
 from datetime import datetime, timedelta, timezone
 from database import Database 
+database = Database()
 
 
-urls = {
-    "https://www.usine-digitale.fr/cybersecurite/rss",
-    "https://thecyberexpress.com/feed/"
-}
+urls = database.chargeUrl()
 
 # permet de faire les small url 
-url = 'http://tinyurl.com/api-create.php?url='
 
 def shorten(url):
   base_url = 'http://tinyurl.com/api-create.php?url='
@@ -28,16 +25,29 @@ def printLine(domain_only):
 
 
 def includeNewArticle():
-    for url in urls:
-        feedParser = feedparser.parse(url)
-        domain_only = feedParser.feed.link.split("//")[-1].split("/")[0]  
-        printLine(feedParser.feed.link)
-        printLine(domain_only)
-        for entry in feedParser.entries:
-            if 'published' in entry:
-                pub_date = datetime.strptime(entry.published, '%a, %d %b %Y %H:%M:%S %z')
-                database.addArticle(entry.title,entry.description,shorten(entry.link),pub_date,urlId)
+    for id, url in urls: 
+        try:
+            feedParser = feedparser.parse(url)
+            if feedParser.bozo: 
+                print(f"Erreur de parsing pour l'URL : {url}")
+                continue
+            
+            domain_only = feedParser.feed.link.split("//")[-1].split("/")[0]  
+            printLine(feedParser.feed.link)
+            printLine(domain_only)
+            
+            for entry in feedParser.entries:
+                if 'published' in entry:
+                    try:
+                        pub_date = datetime.strptime(entry.published, '%a, %d %b %Y %H:%M:%S %z')
+                        database.addArticle(entry.title, entry.description, shorten(entry.link), pub_date, id)
+                    except ValueError as e:
+                        print(f"Erreur de conversion de date pour l'entrée : {entry.title}, erreur : {e}")
+                else:
+                    print(f"L'entrée n'a pas de date publiée : {entry.title}")
 
+        except Exception as e:
+            print(f"Erreur lors du traitement de l'URL {url} : {e}")
 
 
 
@@ -57,7 +67,6 @@ parser.add_argument('-dmin','--date-min',type=str)
 parser.add_argument('-l', '--list-source', action='store_true', help="Liste les sources")
 args = parser.parse_args()
 
-database = Database()
 
 #################################
 # Gestion des arguments de date #
