@@ -46,5 +46,30 @@ class Database:
     def close(self):
         if self.connection is not None and self.connection.is_connected():
             self.connection.close()
-
-
+    def listSource(self):
+        if self.connection is not None and self.connection.is_connected():
+            try:
+                cursor = self.connection.cursor()
+                cursor.execute("SELECT * FROM domain ORDER BY name ASC;")
+                domains = cursor.fetchall()
+                for domain in domains:
+                    domainName = domain[1]
+                    print(f"- {domainName}")
+            except Error as e:
+                print(f"Erreur lors de l'exécution de la requête {e}")
+            finally:
+                cursor.close()
+    def addArticle(self, title,description,url,pub_date,domain):
+        print(domain)
+        if self.connection is not None and self.connection.is_connected():
+            try:
+                cursor = self.connection.cursor()
+                cursor.execute(f"SELECT * FROM article where name = {title} and description = {description};")
+                elem = cursor.fetchone()
+                if elem:
+                    # on peut l'ajouter
+                    cursor.execute(f"INSERT INTO article ('name','description','date','domain','url') VALUES ({title} , {description}, {date}, {domain},{url})")            
+            except Error as e:
+                print(f"Erreur lors de l'exécution de la requête {e}")
+            finally:
+                cursor.close()
