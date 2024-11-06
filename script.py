@@ -29,7 +29,10 @@ def printLine(domain_only):
     
 urls = {
     "https://www.usine-digitale.fr/cybersecurite/rss",
-    "https://thecyberexpress.com/feed/"
+    "https://thecyberexpress.com/feed/",
+    "https://www.journaldunet.com/rss/",
+    "https://www.zataz.com/feed/",
+    "https://www.securityweek.com/feed/"
 }
 
 for url in urls:
