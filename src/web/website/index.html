@@ -4,8 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Bibliotheque VIS-->
-    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 
     <!--Bootstrap-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -20,49 +18,53 @@
     <title>Expall</title>
 </head>
 
-<body >
+<body>
     <div class="d-flex justify-content-center align-center " style="height: 100vh;">
         <div class="w-15 border border-primary h-100">
             <div class="title-forward h-15">
-                Expall
+                Veill
             </div>
             <div class="h-70 overflow-auto">
-                <div class="accordion" id="accordionExample">
-                    {% for company in companies %}
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading{{company.title}}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseheading{{company.title}}" aria-expanded="false"
-                                aria-controls="collapseheading{{company.title}}">
-                                {{company.title}}
-                            </button>
-                        </h2>
-                        <div id="collapseheading{{company.title}}" class="accordion-collapse collapse"
-                            aria-labelledby="headingheading{{company.title}}" data-bs-parent="#accordionExample">
-                            <div class="accordion-body ">
-                                <div>
-                                    <span>Subdomains</span>
-                                    <button class="generateSubDomain" value="{{company.title}}">Generate</button>
-                                    <button>Print</button>
+                <div>
+                    <!--Date-->
+                </div>
+                <div>
+                    <!--Sources-->
+                    <div class="accordion" id="accordionExample">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseheading" aria-expanded="false"
+                                    aria-controls="collapseheading">
+                                    Sources
+                                </button>
+                            </h2>
+                            <div id="collapseheading" class="accordion-collapse collapse"
+                                aria-labelledby="headingheading" data-bs-parent="#accordionExample">
+                                <div class="accordion-body ">
+                                    {% for source in sources %}
+                                        <div>
+                                            <label>
+                                                <input type="checkbox">
+                                                {{source.nom}}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
-            <div class="h-15 d-flex justify-content-center align-center flex-column">
-                <span class="text-center">Ajouter une compagnie</span>
-                <input type="text" id="company-value">
-                <button class="btn btn-war  ning" id="btn-add-company">Ajouter</button>
+            <div class="h-15 w-100 d-flex justify-content-center align-center">
+                <div class="d-flex justify-content-center align-center">
+                    <button class="btn btn-primary h-50 m-auto ">Valider</button>
+                </div>
             </div>
         </div>
         <div class="w-85 h-100 d-flex justify-content-center align-center">
-            <div id="companie-options"class="h-100 w-25">
 
-            </div>
-            <div id="companie-visualisation" class="d-flex justify-content-center align-center h-100 w-75">
-                <div id="mynetwork" class="h-100 w-100" style="background-color: orange;"></div>
+            <div id="filtres" class="d-flex justify-content-center align-center h-100 w-100">
             </div>
 
         </div>

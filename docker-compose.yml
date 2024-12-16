@@ -26,7 +26,7 @@ services:
       MYSQL_DATABASE: app_db
     volumes:
       - db_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/bdd/creation.sql:/docker-entrypoint-initdb.d/creation.sql
 
 volumes:
   db_data: {}
