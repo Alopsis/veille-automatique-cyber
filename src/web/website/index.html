@@ -45,7 +45,7 @@
                                     {% for source in sources %}
                                         <div>
                                             <label>
-                                                <input type="checkbox">
+                                                <input type="checkbox" checked>
                                                 {{source.nom}}
                                             </label>
                                         </div>
@@ -64,7 +64,20 @@
         </div>
         <div class="w-85 h-100 d-flex justify-content-center align-center">
 
-            <div id="filtres" class="d-flex justify-content-center align-center h-100 w-100">
+            <div id="card-container" class="overflow-auto d-flex justify-content-center align-center h-100 w-100 flex-wrap">
+
+                {% for article in articles %}
+                <div class="card" >
+                    <div class="card-body">
+                      <h5 class="card-title">{{article.title}}</h5>
+                      <p class="card-text"></p>
+                      <span class="card-link">{{ article.date }}</a>
+                      <a href="{{ article.link }}" class="card-link">Lien</a>
+                    </div>
+                  </div>
+                {% endfor %}
+                
+                
             </div>
 
         </div>
