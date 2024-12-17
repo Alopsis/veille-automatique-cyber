@@ -18,4 +18,5 @@ CREATE TABLE IF NOT EXISTS articles (
 
 
 INSERT INTO sources (nom, lien) 
-VALUES ('usine-digitale', 'https://www.usine-digitale.fr/cybersecurite/rss');
+VALUES ('usine-digitale', 'https://www.usine-digitale.fr/cybersecurite/rss'),
+    ('Zataz', 'https://www.zataz.com/feed/');

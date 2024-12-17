@@ -60,19 +60,27 @@ def addArticles():
             if 'published' in entry:
                 pub_date = datetime.strptime(entry.published, '%a, %d %b %Y %H:%M:%S %z')
                 print(entry.title)
-                print(" - " + pub_date.strftime('%Y-%m-%d %H:%M:%S'))
+                print(" - " + pub_date.strftime('%Y-%m-%d'))
                 print(" - " + shorten(entry.link))
                 print()
                 insertIfNotExist(entry.title,pub_date,url["id"])
 
 
 def insertIfNotExist(title, date, sourceId):
+    date = date.strftime('%Y-%m-%d')
     connection = connectDatabase()
     cursor = connection.cursor()
     try:
+
         query = "SELECT * FROM articles WHERE title = %s AND date = %s AND source = %s"
         cursor.execute(query, (title, date, sourceId))  
         results = cursor.fetchall()
+        print("Search avec ")
+        print(title)
+        print(date)
+        print(sourceId)
+        print("Resultat : ")
+        print(len(results))
         if len(results) >= 1: 
             print("L'article existe déjà.")
         else:
