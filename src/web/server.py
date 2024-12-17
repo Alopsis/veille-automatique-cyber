@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from pathlib import Path 
-from src.article import getSources,getArticles
+from src.article import getSources,getArticles, addArticles
 import os
 from datetime import date, timedelta, datetime
 
@@ -10,9 +10,10 @@ app = Flask(__name__,
 
 )
 
-#@app.route('/company/subdomains/<companyName>', methods=['POST'])
-#def servGetSubDomains(companyName):
-#    return getSubDomains(companyName)
+@app.route('/refresh/articles', methods=['POST'])
+def refreshArticles():
+    addArticles()
+    return "1"
 
 @app.route('/')
 def servIndex():

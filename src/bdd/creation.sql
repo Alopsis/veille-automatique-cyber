@@ -13,10 +13,16 @@ CREATE TABLE IF NOT EXISTS articles (
     title VARCHAR(255) NOT NULL,
     date date NOT NULL,
     source INT NOT NULL,
+    link VARCHAR(500) NOT NULL,
     FOREIGN KEY (source) REFERENCES sources(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 
 INSERT INTO sources (nom, lien) 
-VALUES ('usine-digitale', 'https://www.usine-digitale.fr/cybersecurite/rss'),
-    ('Zataz', 'https://www.zataz.com/feed/');
+VALUES ('Usine Digitale', 'https://www.usine-digitale.fr/cybersecurite/rss'),
+    ('Zataz', 'https://www.zataz.com/feed/'),
+    ('Siecle digitale','https://siecledigital.fr/cybersecurite/feed/'),
+    ('Cybersécurité-info','https://cybersecurite-info.fr//feed/'),
+    ('IT-Connect','https://www.it-connect.fr/feed/'),
+    ('Zdnet','https://www.zdnet.fr/feeds/rss/actualites/cybersecurite-3900046206q.htm'),
+    ('Futura Sciences','https://www.futura-sciences.com/rss/actualites.xml');
