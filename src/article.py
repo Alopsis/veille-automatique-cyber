@@ -23,21 +23,21 @@ def getSources():
 def getArticles(dateMin, dateMax, sourceBan):
     connection = connectDatabase()
     cursor = connection.cursor()
-    print(dateMin, dateMax)
 
     query = "SELECT * FROM articles WHERE date >= %s AND date <= %s"
     parameters = [dateMin, dateMax]
     cursor.execute(query, parameters)
     articles = []
     results = cursor.fetchall()
-    print(results)
     for row in results:
-        if row[3] not in sourceBan:
+        print(str(row[3]))
+        print(sourceBan)
+        print(str(row[3]) not in sourceBan)
+        if str(row[3]) not in sourceBan:
             articles.append({"id": row[0], "title": row[1], "date": row[2], "source": row[3], "link":row[4]})
     articles.sort(key=lambda x: x['date'])
     cursor.close()
     connection.close()
-    print(articles)
     return articles
 
 

@@ -17,6 +17,34 @@ $(document).ready(function() {
             }
         })
     })
+    $('#valider').on("click",function(){
+        console.log("on click")
+        let sources = [];
+        $('.source-checkbox').each(function() {
+            if ($(this).is(":checked") == false) { 
+                const value = $(this).val(); 
+                if (!sources.includes(value)) { 
+                    sources.push(value); 
+                }
+            }
+        });
+        
+        console.log(sources)
+        $.ajax({
+            url: "http://127.0.0.1:5000/valider",
+            type:"POST",
+            data:{
+                sources: sources
+            },
+            success: function(response){
+                console.log(response);
+                $('#super-container').html(response);
+            },
+            error: function(xhr, status,error){
+                console.error("Ko");
+            }
+        })
+    })
     /*$(".generateSubDomain").on("click", function() {
         companyName = $(this).val()
         $.ajax({

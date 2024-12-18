@@ -1,0 +1,26 @@
+<div id="card-container"
+class="overflow-auto d-flex justify-content-center align-center h-100 w-100 flex-wrap">
+{% for article in articles %}
+{% if loop.index >= 1 and article.date != articles[loop.index - 2].date %}
+    <div class="w-100 d-flex justify-content-center align-items-center">
+        <span class="w-10" style="height: 1px; background-color: black;"></span>
+        <span class="w-10 d-flex justify-content-center align-items-center">
+            {{ article.date }}
+        </span>
+        <span class="w-80" style="height: 1px; background-color: black;"></span>
+    </div>
+{% endif %}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ article.title }}</h5>
+        <p class="card-text"></p>
+        <span class="card-link">{{ article.date }}</span>
+        <a href="{{ article.link }}" target="_blank" class="card-link">Lien</a>
+    </div>
+</div>
+{% endfor %}
+
+
+
+</div>
