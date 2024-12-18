@@ -35,7 +35,7 @@ def getArticles(dateMin, dateMax, sourceBan):
         print(str(row[3]) not in sourceBan)
         if str(row[3]) not in sourceBan:
             articles.append({"id": row[0], "title": row[1], "date": row[2], "source": row[3], "link":row[4]})
-    articles.sort(key=lambda x: x['date'])
+    articles.sort(key=lambda x: x['date'], reverse=True)
     cursor.close()
     connection.close()
     return articles

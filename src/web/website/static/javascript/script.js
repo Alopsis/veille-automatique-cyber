@@ -45,6 +45,26 @@ $(document).ready(function() {
             }
         })
     })
+    $('#add-frise').on("click",function(){
+        let nom = $("#frise-input-name").val();
+        console.log(nom);
+        if (nom == ""){
+            return; 
+        }
+        $.ajax({
+            url: "http://127.0.0.1:5000/add/frise",
+            type: "POST",
+            data:{
+                nom: nom
+            },
+            success: function(response){
+                console.log(response);
+            },
+            error: function(xhr, status, error){
+                
+            }
+        })
+    })
     /*$(".generateSubDomain").on("click", function() {
         companyName = $(this).val()
         $.ajax({

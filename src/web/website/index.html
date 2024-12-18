@@ -51,6 +51,44 @@
                                     </div>
                                     {% endfor %}
                                 </div>
+                                <div>
+                                    <button class="btn btn-primary h-50 m-auto" id="valider">Valider</button>
+                                    <button id="refresh" class="btn-btn-primary h-25 m-auto">Refresh les articles</button>
+                
+                                </div>
+                            </div>
+                            <h2 class="accordion-header" id="heading">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseheading-frise" aria-expanded="false"
+                                    aria-controls="collapseheading-frise">
+                                    Frise chronologique
+                                </button>
+                            </h2>
+                            <div id="collapseheading-frise" class="accordion-collapse collapse"
+                                aria-labelledby="headingheading" data-bs-parent="#accordionExample">
+                                <div class="accordion-body ">
+                                    <div>
+                                        <!--Liste-->
+                                        {% for frise in frises %}
+                                            <div class="d-flex justify-content-center align-items-center"> 
+                                                <span>
+                                                    {{frise.nom}}
+                                                </span>
+                                                <button class="btn-sm btn btn-success">
+                                                    Afficher
+                                                </button>
+                                                <button class="btn-sm btn btn-danger">
+                                                    Supprimer
+                                                </button>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div>
+                                        <!--Ajouter-->
+                                        <input type="text" id="frise-input-name">
+                                        <button id="add-frise">Ajouter</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -58,8 +96,6 @@
             </div>
             <div class="h-15 w-100 d-flex justify-content-center align-center">
                 <div class="d-flex justify-content-center align-center flex-column">
-                    <button class="btn btn-primary h-50 m-auto" id="valider">Valider</button>
-                    <button id="refresh" class="btn-btn-primary h-25 m-auto">Refresh les articles</button>
                 </div>
             </div>
         </div>

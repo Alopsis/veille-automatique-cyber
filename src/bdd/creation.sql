@@ -17,6 +17,19 @@ CREATE TABLE IF NOT EXISTS articles (
     FOREIGN KEY (source) REFERENCES sources(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS frise (
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS linkFrise (
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    id_frise INT NOT NULL,
+    id_article INT NOT NULL,
+    FOREIGN KEY (id_frise) REFERENCES frise(id),
+    FOREIGN KEY (id_article) REFERENCES articles(id)
+
+);
 
 INSERT INTO sources (nom, lien) 
 VALUES ('Usine Digitale', 'https://www.usine-digitale.fr/cybersecurite/rss'),
