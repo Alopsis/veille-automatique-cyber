@@ -25,10 +25,9 @@ CREATE TABLE IF NOT EXISTS frise (
 CREATE TABLE IF NOT EXISTS linkFrise (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     id_frise INT NOT NULL,
-    id_article INT NOT NULL,
+    valeur VARCHAR(255) NOT NULL,
+    date_publi DATE NOT NULL,
     FOREIGN KEY (id_frise) REFERENCES frise(id),
-    FOREIGN KEY (id_article) REFERENCES articles(id)
-
 );
 
 INSERT INTO sources (nom, lien) 

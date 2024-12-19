@@ -1,5 +1,46 @@
+function isNumber(value) {
+    return typeof value === 'number';
+}
+var timeline;
 
+function getDataFromFrise(friseId) {
+    $.ajax({
+        type: "POST",
+        url: "http://127.0.0.1:5000/recup/data/frise",
+        data: {
+            friseId: friseId,
+        },
+        success: function success(data) {
+            var container = document.getElementById("frise");
+            var items = new vis.DataSet();
+            data.forEach((element, index) => {
+                items.add({
+                    id: index + 1,
+                    content: element.valeur,
+                    start: element.date,
+                });
+            });
 
+            if (timeline) {
+                timeline.setItems(items);
+            } else {
+                var options = {
+                };
+
+                timeline = new vis.Timeline(container, items, options);
+                timeline.on("click", function (properties) {
+                    if (properties.item) {
+                        var item = items.get(properties.item);
+                        console.log(item);
+                    }
+                });
+            }
+        },
+        error: function error(xhr, status, error) {
+            console.error("Erreur lors de la récupération des données :", error);
+        },
+    });
+}
 
 
 $(document).ready(function() {
@@ -78,17 +119,10 @@ $(document).ready(function() {
             },
             success: function success(response){
                 $('#super-container').html(response);
-                var container = document.getElementById("frise");
-                var items = new vis.DataSet([
-                    { id: 1, content: "item 1", start: "2014-04-20" },
-                    { id: 2, content: "item 2", start: "2014-04-14" },
-                    { id: 3, content: "item 3", start: "2014-04-18" },
-                    { id: 4, content: "item 4", start: "2014-04-16", end: "2014-04-19" },
-                    { id: 5, content: "item 5", start: "2014-04-25" },
-                    { id: 6, content: "item 6", start: "2014-04-27", type: "point" },
-                ]);
-                var options = {};
-                var timeline = new vis.Timeline(container, items, options);
+
+                data = getDataFromFrise(friseId);
+        
+                
                             
             },
             error: function error(xhr, status,error){
@@ -98,8 +132,33 @@ $(document).ready(function() {
 
 
     })
-
-
+    $(document).on("click", "#btn-ajout-frise-item", function () {
+        let date = $('#date-value').val();
+        let value = $('#add-item-frise-value').val();
+        let idfrise = $(this).data("value");
+        if (value !== "" && date !== "") {
+            console.log("Les champs ont été correctement remplis.");
+            $.ajax({
+                type:"POST",
+                url: "http://127.0.0.1:5000/add/frise/item",
+                data:{
+                    idfrise: idfrise,
+                    date: date,
+                    value:value,
+                },
+                success: function success(response){
+                    console.log("Reussi ! ");
+                    getDataFromFrise(idfrise);
+                }, 
+                error: function error(xhr, status, error){
+                    console.log("Ko");
+                }
+            })
+        } else {
+            console.error("Veuillez remplir tous les champs.");
+        }
+    });
+    
     /*$(".generateSubDomain").on("click", function() {
         companyName = $(this).val()
         $.ajax({

@@ -18,6 +18,43 @@ def getFrise():
     cursor.close()
     connection.close()
     return frise
+def addItemToFrise(friseid, valeur, date):
+    if not friseid or not valeur or not date:
+        raise ValueError("friseid, valeur, et date sont obligatoires")
+    
+    connection = connectDatabase()
+    cursor = connection.cursor()
+
+    query = "SELECT * FROM frise WHERE id = %s"
+    cursor.execute(query, (friseid,))
+    results = cursor.fetchall()
+
+    if len(results) >= 1:
+        query = """
+                INSERT INTO linkFrise (id_frise, valeur, date_publi)
+                VALUES (%s, %s, %s)
+            """
+        cursor.execute(query, (friseid, valeur, date))
+        connection.commit()
+    else:
+        raise ValueError("La frise avec l'ID spécifié n'existe pas")
+    cursor.close()
+    connection.close()
+
+def getItemFrise(friseid):
+    connection = connectDatabase()
+    cursor = connection.cursor()
+
+    query = "SELECT * FROM linkFrise WHERE id_frise = %s"
+    cursor.execute(query, (friseid,))
+    results = cursor.fetchall()
+    item = []
+    for row in results:
+        item.append({"id": row[0], "valeur": row[3], "date": row[4]})
+    cursor.close()
+    connection.close()
+    return item
+
 def get_specific_frise(id):
     try:
         connection = connectDatabase()
