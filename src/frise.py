@@ -18,12 +18,31 @@ def getFrise():
     cursor.close()
     connection.close()
     return frise
+def get_specific_frise(id):
+    try:
+        connection = connectDatabase()
+        cursor = connection.cursor()
+        query = "SELECT id, nom FROM frise WHERE id = %s"
+        cursor.execute(query, (id,))
+        result = cursor.fetchone()
+        if not result:
+            print("La frise n'existe pas")
+            return None
+        frise = {"id": result[0], "nom": result[1]}
+
+    except mysql.connector.Error as err:
+        print(f"Erreur lors de l'accès à la base de données : {err}")
+        return None
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+    return frise
 
 
 def addFrise(nom):
-    print("-à-ç-ç-ç-ç-ç-ç-")
-    print(nom)
-    print("-à-ç-ç-ç-ç-ç-ç-")
     connection = connectDatabase()
     cursor = connection.cursor()
     try:

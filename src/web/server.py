@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from pathlib import Path 
 from src.article import getSources,getArticles, addArticles
-from src.frise import getFrise, addFrise 
+from src.frise import getFrise, addFrise  ,get_specific_frise
 import os
 from datetime import date, timedelta, datetime
 app = Flask(__name__, 
@@ -36,6 +36,11 @@ def valider():
 
     return render_template('pages/articles.html',articles=getArticles(seven_days_ago,today,sources))
 
+@app.route('/affiche/frise',methods=['POST'])
+def afficherFriseFront():
+    friseId = request.form.get('friseId')
+    frise = get_specific_frise(friseId)
+    return render_template('pages/frise.html',frise=frise)
 @app.route('/')
 def servIndex():
     print("---------------------")
