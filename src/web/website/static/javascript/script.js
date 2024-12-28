@@ -11,8 +11,10 @@ function getDataFromFrise(friseId) {
             friseId: friseId,
         },
         success: function success(data) {
+            $('#frise').empty();
             var container = document.getElementById("frise");
             var items = new vis.DataSet();
+
             data.forEach((element, index) => {
                 items.add({
                     id: index + 1,
@@ -21,20 +23,16 @@ function getDataFromFrise(friseId) {
                 });
             });
 
-            if (timeline) {
-                timeline.setItems(items);
-            } else {
-                var options = {
-                };
+            var options = {
+            };
 
-                timeline = new vis.Timeline(container, items, options);
-                timeline.on("click", function (properties) {
-                    if (properties.item) {
-                        var item = items.get(properties.item);
-                        console.log(item);
-                    }
-                });
-            }
+            timeline = new vis.Timeline(container, items, options);
+            timeline.on("click", function (properties) {
+                if (properties.item) {
+                    var item = items.get(properties.item);
+                    console.log(item);
+                }
+            });
         },
         error: function error(xhr, status, error) {
             console.error("Erreur lors de la récupération des données :", error);
@@ -106,32 +104,29 @@ $(document).ready(function() {
             }
         })
     })
-    $('.btn-afficher-frise').on("click",function(){
+    $('.btn-afficher-frise').on("click", function() {
         console.log("test");
-        friseId = $(this).val();
+        let friseId = $(this).val();
         console.log(friseId);
-        // ajax 
+    
+        // Appel AJAX pour afficher la frise
         $.ajax({
             url: "http://127.0.0.1:5000/affiche/frise",
-            type:"POST",
-            data:{
-                friseId:friseId,
+            type: "POST",
+            data: {
+                friseId: friseId,
             },
-            success: function success(response){
+            success: function(response) {
                 $('#super-container').html(response);
-
-                data = getDataFromFrise(friseId);
-        
                 
-                            
+                getDataFromFrise(friseId);
             },
-            error: function error(xhr, status,error){
+            error: function(xhr, status, error) {
                 console.log("ko");
             }
-        })
-
-
-    })
+        });
+    });
+    
     $(document).on("click", "#btn-ajout-frise-item", function () {
         let date = $('#date-value').val();
         let value = $('#add-item-frise-value').val();
