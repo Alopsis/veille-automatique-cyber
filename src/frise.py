@@ -55,6 +55,28 @@ def getItemFrise(friseid):
     connection.close()
     return item
 
+def getItem(itemId):
+    try:
+        connection = connectDatabase()
+        cursor = connection.cursor()
+        query = "SELECT id, valeur ,date_publi FROM linkFrise WHERE id = %s"
+        cursor.execute(query, (itemId,))
+        result = cursor.fetchone()
+        if not result:
+            print("L'item n'existe pas")
+            return None
+        item = {"id": result[0], "valeur": result[1], "date":result[2]}
+
+    except mysql.connector.Error as err:
+        print(f"Erreur lors de l'accès à la base de données : {err}")
+        return None
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+    return item
 def get_specific_frise(id):
     try:
         connection = connectDatabase()

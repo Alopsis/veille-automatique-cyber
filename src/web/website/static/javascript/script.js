@@ -3,6 +3,21 @@ function isNumber(value) {
 }
 var timeline;
 
+function afficheModification(itemId){
+    $.ajax({
+        type:"POST",
+        url:"http://127.0.0.1:5000/item/modify",
+        data:{
+            itemId: itemId,
+        },
+        success: function success(data){
+            $('#modification-placement').html(data);
+        },
+        error: function error(xhr, status, error){
+
+        }
+    })
+}
 function getDataFromFrise(friseId) {
     $.ajax({
         type: "POST",
@@ -11,28 +26,32 @@ function getDataFromFrise(friseId) {
             friseId: friseId,
         },
         success: function success(data) {
-            $('#frise').empty();
-            var container = document.getElementById("frise");
-            var items = new vis.DataSet();
+                console.log(data);
+                $('#frise').empty();
+                var container = document.getElementById("frise");
+                var items = new vis.DataSet();
 
-            data.forEach((element, index) => {
-                items.add({
-                    id: index + 1,
-                    content: element.valeur,
-                    start: element.date,
+                data.forEach((element, index) => {
+                    items.add({
+                        id: index + 1,
+                        content: element.valeur,
+                        start: element.date,
+                        idBdd: element.id, 
+                    });
                 });
-            });
 
-            var options = {
-            };
+                var options = {
+                };
 
-            timeline = new vis.Timeline(container, items, options);
-            timeline.on("click", function (properties) {
-                if (properties.item) {
-                    var item = items.get(properties.item);
-                    console.log(item);
-                }
-            });
+                timeline = new vis.Timeline(container, items, options);
+                timeline.on("click", function (properties) {
+                    if (properties.item) {
+                        var item = items.get(properties.item);
+                        console.log(item['idBdd']);
+                        afficheModification(item['idBdd']);
+                        console.log(item);
+                    }
+                });
         },
         error: function error(xhr, status, error) {
             console.error("Erreur lors de la récupération des données :", error);

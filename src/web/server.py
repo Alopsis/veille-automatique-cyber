@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from pathlib import Path 
 from src.article import getSources,getArticles, addArticles
-from src.frise import getFrise, addFrise  ,get_specific_frise, addItemToFrise, getItemFrise
+from src.frise import getFrise, addFrise  ,get_specific_frise, addItemToFrise, getItemFrise, getItem
 import os
 from datetime import date, timedelta, datetime
 app = Flask(__name__, 
@@ -36,6 +36,10 @@ def addItemToFriseFront():
     addItemToFrise(friseid, valeur, date)
     return "1"
 
+@app.route('/item/modify',methods=['POST'])
+def modifyItem():
+    itemId = request.form.get('itemId')
+    return render_template('pages/modifyItem.html',item=getItem(itemId))
 @app.route('/valider',methods=['POST'])
 def valider():
     sources = request.form.getlist('sources[]')
