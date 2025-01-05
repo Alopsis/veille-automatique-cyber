@@ -50,3 +50,22 @@
 .card-title{
     font-size: 15px;
 }
+
+.btn-simple{
+    width: 150px;
+    height: 35px;
+    border-width: 1px;
+    border-radius: 5px;
+    font-weight: 500;
+    background-color: #090909;
+    color: white;
+    border-color: #222;
+}
+
+body{
+    background-color: #090909;
+    color:white;
+}
+.accordion-item{
+    background-color: #090909;
+}
