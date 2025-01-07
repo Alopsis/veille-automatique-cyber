@@ -62,6 +62,53 @@ function getDataFromFrise(friseId) {
 
 $(document).ready(function() {
 
+    $("#login").on("click",function(){
+        username = $('#username-input').val();
+        password = $('#pass-input').val();
+        $.ajax({
+            url: "http://127.0.0.1:5000/login",
+            type: "POST",
+            data:{
+                username: username,
+                password:password,
+            },
+            success: function(response) {
+                console.log(response.message);
+            },
+            error: function(xhr, status, error){
+                console.log(xhr.responseJSON.message);
+            }
+        })
+    })
+    $('#register').on("click",function(){
+        username=$('#username-register').val();
+        password = $('#pass-register').val();
+        console.log(username);
+        console.log(password);
+        $.ajax({
+            url: "http://127.0.0.1:5000/register",
+            type: "POST",
+            data:{
+                username: username,
+                password:password,
+            },
+            success: function(response) {
+                console.log(response.message);
+            },
+            error: function(xhr, status, error){
+                console.log(xhr.responseJSON.message);
+            }
+        })
+    })
+    $('#logout').on("click",function(){
+        $.ajax({
+            url: "http://127.0.0.1:5000/logout",
+            type:"POST",
+            success: function(response) {
+                window.location.reload();
+            }
+        })
+    })
 
     $("#refresh").on("click",function(){
         $.ajax({

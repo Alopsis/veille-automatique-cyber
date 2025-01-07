@@ -1,5 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash, session, make_response  ,jsonify
 from pathlib import Path 
+import bcrypt 
+from src.user import getUser, insertUser
 from src.article import getSources,getArticles, addArticles
 from src.frise import getFrise, addFrise  ,get_specific_frise, addItemToFrise, getItemFrise, getItem
 import os
@@ -9,6 +11,7 @@ app = Flask(__name__,
             static_folder=Path(__file__).parent / 'website' / 'static' 
 
 )
+app.secret_key = os.urandom(24)
 
 @app.route('/refresh/articles', methods=['POST'])
 def refreshArticles():
@@ -51,7 +54,7 @@ def valider():
     today = today.strftime('%Y-%m-%d')
 
     return render_template('pages/articles.html',articles=getArticles(seven_days_ago,today,sources))
-@app.route('//recup/data/frise',methods=['POST'])
+@app.route('/recup/data/frise',methods=['POST'])
 def recupDataForFrise():
     friseId = request.form.get("friseId")
     return getItemFrise(friseId)
@@ -70,7 +73,62 @@ def servIndex():
     today = datetime.now()
     seven_days_ago = (today - timedelta(days=7)).strftime('%Y-%m-%d')
     today = today.strftime('%Y-%m-%d')
-    return render_template('index.html', sources=getSources(), articles=getArticles(seven_days_ago,today,[]), frises=getFrise())  
+    if 'username' in session:
+        username = session['username']
+    else:
+        username = None
+    return render_template('index.html', 
+                           sources=getSources(), 
+                           articles=getArticles(seven_days_ago, today, []), 
+                           frises=getFrise(), 
+                           username=username)
 
 def runWebsite():
     app.run(debug=True)
+
+
+
+
+# Gestion des connexions 
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.pop('username', None)
+    return make_response(jsonify({"message": "Logout successful"}), 200)  
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        user = getUser(username, password)
+
+        if user:
+            session['username'] = user[1] 
+            return make_response(jsonify({"message": "Login successful"}), 200)  
+        else:
+            return make_response(jsonify({"message": "Invalid credentials"}), 403)  
+
+    
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        print(password)
+        user = insertUser(username, password)
+        
+        if user is None:
+            return make_response(jsonify({"message": "Une erreur est apparue"}), 403)  
+        else:
+            session['username'] = user  # Utilise directement le nom d'utilisateur
+            flash('Registration successful!', 'success')
+            return make_response(jsonify({"message": "Login successful"}), 200)  
+
+
+def permPageUser():
+    if 'username' in session:
+        return f"Welcome, {session['username']}!"
+    else:
+        flash('Please log in to access this page.', 'danger')
+        return redirect(url_for('login'))

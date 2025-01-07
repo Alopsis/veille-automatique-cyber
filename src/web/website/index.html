@@ -25,7 +25,8 @@
     <div class="d-flex justify-content-center align-center " style="height: 100vh;">
         <div class="w-15 border border-primary h-100">
             <div class="title-forward h-15">
-                Veill
+                
+                Veille-Auto
             </div>
             <div class="h-70 overflow-auto">
                 <div>
@@ -95,11 +96,54 @@
                                 </div>
                             </div>
                         </div>
+                        <h2 class="accordion-header" id="heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseheading-perso" aria-expanded="false"
+                                aria-controls="collapseheading-perso">
+                                Liste personnalisée
+                            </button>
+                        </h2>
+                        <div id="collapseheading-perso" class="accordion-collapse collapse"
+                            aria-labelledby="headingheading" data-bs-parent="#accordionExample">
+                            <div class="accordion-body ">
+                                <div>
+                                    <!--Liste-->
+                                    {% for perso in persos %}
+                                        <div class="d-flex justify-content-center align-items-center"> 
+                                            <span>
+                                                {{frise.nom}}
+                                            </span>
+
+                                            <button class="btn-sm btn btn-success btn-afficher-frise" value="{{frise.id}}" >
+                                                Afficher
+                                            </button>
+                                            <button class="btn-sm btn btn-danger btn-supprimer-frise" value="{{frise.id}}" >
+                                                Supprimer
+                                            </button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="h-15 w-100 d-flex justify-content-center align-center">
                 <div class="d-flex justify-content-center align-center flex-column">
+                    {% if username  %}
+                        {{username}}
+                        <button id="logout">Logout</button>
+                        {% else %}
+                        <input id="username-input" type="text">
+                        <input id="pass-input" type="password"> 
+                        <button id="login">Login</button>
+    
+                        <input id="username-register" type="text">
+                        <input id="pass-register" type="pass">
+                        <button id="register">Register</button>
+                        {% endif %}
+
                 </div>
             </div>
         </div>
