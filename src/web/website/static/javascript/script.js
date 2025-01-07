@@ -61,7 +61,29 @@ function getDataFromFrise(friseId) {
 
 
 $(document).ready(function() {
+    var myModal = document.getElementById('exampleModalCenter')
+    var myInput = document.getElementById('myInput')
+    
+    myModal.addEventListener('shown.bs.modal', function () {
+      myInput.focus()
+    })
+    
+    $('#add-liste-perso').on("click",function(){
+        nom = $('#liste-perso-new').val();
+        $.ajax({
+            url: "http://127.0.0.1:5000/add/frisePerso",
+            type: "POST",
+            data:{
+                nom: nom
+            },
+            success: function success(response){
 
+            },
+            error:  function error(xhr , status, error){
+            
+            }
+        })
+    })
     $("#login").on("click",function(){
         username = $('#username-input').val();
         password = $('#pass-input').val();
@@ -74,6 +96,8 @@ $(document).ready(function() {
             },
             success: function(response) {
                 console.log(response.message);
+                window.location.reload();
+
             },
             error: function(xhr, status, error){
                 console.log(xhr.responseJSON.message);
@@ -94,6 +118,8 @@ $(document).ready(function() {
             },
             success: function(response) {
                 console.log(response.message);
+                window.location.reload();
+
             },
             error: function(xhr, status, error){
                 console.log(xhr.responseJSON.message);

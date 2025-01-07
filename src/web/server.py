@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from pathlib import Path 
 import bcrypt 
 from src.user import getUser, insertUser
+from src.listePerso import insertListe, getListes
 from src.article import getSources,getArticles, addArticles
 from src.frise import getFrise, addFrise  ,get_specific_frise, addItemToFrise, getItemFrise, getItem
 import os
@@ -53,7 +54,7 @@ def valider():
     seven_days_ago = (today - timedelta(days=7)).strftime('%Y-%m-%d')
     today = today.strftime('%Y-%m-%d')
 
-    return render_template('pages/articles.html',articles=getArticles(seven_days_ago,today,sources))
+    return render_template('pages/articles.html',articles=getArticles(seven_days_ago,today,sources),listesPersos = listePersos)
 @app.route('/recup/data/frise',methods=['POST'])
 def recupDataForFrise():
     friseId = request.form.get("friseId")
@@ -75,20 +76,26 @@ def servIndex():
     today = today.strftime('%Y-%m-%d')
     if 'username' in session:
         username = session['username']
+        listePersos = getListes(session['usernameId'])
     else:
         username = None
+        listePersos = []
     return render_template('index.html', 
                            sources=getSources(), 
                            articles=getArticles(seven_days_ago, today, []), 
                            frises=getFrise(), 
+                           listesPersos=listePersos,
                            username=username)
 
 def runWebsite():
     app.run(debug=True)
 
 
-
-
+@app.route('/add/frisePerso', methods=['POST'])
+def ajouteFrisePerso():
+    nom = request.form.get('nom')
+    insertListe(nom, session["usernameId"])
+    return make_response(jsonify({"message": "Login successful"}), 200)  
 # Gestion des connexions 
 
 @app.route('/logout', methods=['POST'])
@@ -105,6 +112,7 @@ def login():
 
         if user:
             session['username'] = user[1] 
+            session['usernameId'] = user[0] 
             return make_response(jsonify({"message": "Login successful"}), 200)  
         else:
             return make_response(jsonify({"message": "Invalid credentials"}), 403)  

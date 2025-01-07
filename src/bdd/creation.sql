@@ -27,6 +27,29 @@ CREATE TABLE IF NOT EXISTS frise (
     nom VARCHAR(255) NOT NULL
 );
 
+
+
+CREATE TABLE IF NOT EXISTS liste_perso(
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS linkListeArticle(
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    id_article INT NOT NULL,
+    id_liste INT NOT NULL,
+    FOREIGN KEY (id_article) REFERENCES articles(id),
+    FOREIGN KEY (id_liste) REFERENCES liste_perso(id)
+);
+
+CREATE TABLE IF NOT EXISTS linkUserListe(
+    id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    id_user INT NOT NULL,
+    id_liste_perso INT NOT NULL,
+    FOREIGN KEY (id_liste_perso) REFERENCES liste_perso(id),
+    FOREIGN KEY (id_user) REFERENCES users(id)
+);
+
 CREATE TABLE IF NOT EXISTS linkFrise (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     id_frise INT NOT NULL,

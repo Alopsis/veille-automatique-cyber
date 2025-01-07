@@ -15,7 +15,6 @@ def getSources():
     results = cursor.fetchall()
     for row in results:
         sources.append({"id": row[0], "nom": row[1], "lien": row[2]})
-        print(f"ID: {row[0]}, Nom: {row[1]}, Lien: {row[2]}")
     cursor.close()
     connection.close()
     return sources
@@ -30,9 +29,6 @@ def getArticles(dateMin, dateMax, sourceBan):
     articles = []
     results = cursor.fetchall()
     for row in results:
-        print(str(row[3]))
-        print(sourceBan)
-        print(str(row[3]) not in sourceBan)
         if str(row[3]) not in sourceBan:
             articles.append({"id": row[0], "title": row[1], "date": row[2], "source": row[3], "link":row[4]})
     articles.sort(key=lambda x: x['date'], reverse=True)

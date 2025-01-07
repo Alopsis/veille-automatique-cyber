@@ -15,16 +15,11 @@ def getUser(username, password):
         user = cursor.fetchone()
         if user:
             stored_password = user[2]
-            print(f"Mot de passe stocké (haché): {stored_password}")
-            print(f"Mot de passe saisi: {password}")
             if bcrypt.checkpw(password.encode('utf-8'), stored_password.encode('utf-8')):
-                print("Connexion réussie")
                 return user
             else:
-                print("Mot de passe incorrect")
                 return None
         else:
-            print("Utilisateur non trouvé")
             return None
 
     except Exception as e:
@@ -57,10 +52,8 @@ def insertUser(username, password):
             cursor.execute(query, (username, hashed_password))
             connection.commit()
             if cursor.rowcount >= 1:
-                print("Utilisateur enregistré")
                 return username
             else:
-                print("Erreur lors de l'enregistrement")
                 return None
 
     except Exception as e:
