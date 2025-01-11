@@ -51,7 +51,7 @@ def valider():
     print(sources)
     print("--------------------------")
     today = datetime.now()
-    seven_days_ago = (today - timedelta(days=7)).strftime('%Y-%m-%d')
+    seven_days_ago = (today - timedelta(days=7)).strftime('%Y-%m-%d') 
     today = today.strftime('%Y-%m-%d')
 
     return render_template('pages/articles.html',articles=getArticles(seven_days_ago,today,sources),listesPersos = listePersos)
@@ -66,7 +66,6 @@ def afficherFriseFront():
     frise = get_specific_frise(friseId)
     print("-_-_-_-_-_")
     print(frise)
-    print(getItemFrise(friseId))
     return render_template('pages/frise.html',frise=frise,itemFrise=getItemFrise(friseId))
 @app.route('/')
 def servIndex():
@@ -129,7 +128,8 @@ def register():
         if user is None:
             return make_response(jsonify({"message": "Une erreur est apparue"}), 403)  
         else:
-            session['username'] = user  # Utilise directement le nom d'utilisateur
+            session['username'] = user[0]
+            session['usenameId'] = user[1]
             flash('Registration successful!', 'success')
             return make_response(jsonify({"message": "Login successful"}), 200)  
 

@@ -2,6 +2,16 @@ CREATE DATABASE IF NOT EXISTS `veille-automatique-cyber`;
 
 USE `veille-automatique-cyber`;
 
+
+
+DROP TABLE IF EXISTS sources;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS frise;
+DROP TABLE IF EXISTS liste_perso;
+DROP TABLE IF EXISTS linkListeArticle;
+DROP TABLE IF EXISTS linkUserListe;
+DROP TABLE IF EXISTS linkFrise;
 CREATE TABLE IF NOT EXISTS sources (
     id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
@@ -55,7 +65,7 @@ CREATE TABLE IF NOT EXISTS linkFrise (
     id_frise INT NOT NULL,
     valeur VARCHAR(255) NOT NULL,
     date_publi DATE NOT NULL,
-    FOREIGN KEY (id_frise) REFERENCES frise(id),
+    FOREIGN KEY (id_frise) REFERENCES frise(id)
 );
 
 INSERT INTO sources (nom, lien) 

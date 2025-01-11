@@ -52,9 +52,13 @@ def insertUser(username, password):
             cursor.execute(query, (username, hashed_password))
             connection.commit()
             if cursor.rowcount >= 1:
-                return username
+                user_id_query = "SELECT id FROM users WHERE username = %s"
+                cursor.execute(user_id_query, (username,))
+                user_id = cursor.fetchone()[0]
+                return [username, user_id]
             else:
                 return None
+
 
     except Exception as e:
         print(f"Erreur lors de l'exécution : {e}")

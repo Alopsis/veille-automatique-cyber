@@ -42,18 +42,25 @@ def addItemToFrise(friseid, valeur, date):
     connection.close()
 
 def getItemFrise(friseid):
-    connection = connectDatabase()
-    cursor = connection.cursor()
+    try:
+        connection = connectDatabase()
+        cursor = connection.cursor(dictionary=True)
 
-    query = "SELECT * FROM linkFrise WHERE id_frise = %s"
-    cursor.execute(query, (friseid,))
-    results = cursor.fetchall()
-    item = []
-    for row in results:
-        item.append({"id": row[0], "valeur": row[3], "date": row[4]})
-    cursor.close()
-    connection.close()
-    return item
+        query = "SELECT * FROM linkFrise WHERE id_frise = %s"
+        cursor.execute(query, (friseid,))
+        results = cursor.fetchall()
+
+        item = [{"id": row["id"], "valeur": row["valeur"], "date": row["date"]} for row in results]
+        return item
+    except Exception as e:
+        print(f"Erreur : {e}")
+        return []
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
 
 def getItem(itemId):
     try:
