@@ -42,28 +42,32 @@ class="overflow-auto d-flex justify-content-center align-center h-100 w-100 flex
         <td>{{ article.title }}</td>
         <td>{{ article.date.strftime('%d/%m/%Y') }}</td>
         <td>
+          {% if username %}
           <a href="{{ article.link }}" target="_blank" class="card-link">Voir plus</a>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal{{article.id}}">
             Ouvrir la Popup
           </button>
-          <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal fade" id="myModal{{article.id}}" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="myModalLabel">Titre de la Popup</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body"> 
+                  {{ article.title}}
                   {% for liste in listesPersos %}
                   <div>
-                    {{ liste.nom }}
-                    <button>Ajouter</button>
+                    <span class="black-text">{{ liste.nom }}</span>
+                    
+                    <button class="btn-ajouter-article-liste" data-listeId="{{liste.id}}" data-articleId="{{article.id}}">Ajouter</button>
                   </div>
                   {% endfor %}
                 </div>
               </div>
             </div>
           </div>
+          {% endif %}
         </td>
 
       </tr>

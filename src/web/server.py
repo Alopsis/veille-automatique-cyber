@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from pathlib import Path 
 import bcrypt 
 from src.user import getUser, insertUser
-from src.listePerso import insertListe, getListes
+from src.listePerso import insertListe, getListes, getArticlesListePerso , addArticleListePerso
 from src.article import getSources,getArticles, addArticles
 from src.frise import getFrise, addFrise  ,get_specific_frise, addItemToFrise, getItemFrise, getItem
 import os
@@ -53,11 +53,15 @@ def valider():
     today = datetime.now()
     seven_days_ago = (today - timedelta(days=7)).strftime('%Y-%m-%d') 
     today = today.strftime('%Y-%m-%d')
-
-    return render_template('pages/articles.html',articles=getArticles(seven_days_ago,today,sources),listesPersos = listePersos)
+    if 'username' in session:
+        listePersos = getListes(session['usernameId'])
+    else:
+        listePersos = []
+    return render_template('pages/articles.html',articles=getArticles(seven_days_ago,today,sources),listesPersos = listePersos,username=session['username'])
 @app.route('/recup/data/frise',methods=['POST'])
 def recupDataForFrise():
     friseId = request.form.get("friseId")
+    print(getItemFrise(friseId))
     return getItemFrise(friseId)
 
 @app.route('/affiche/frise',methods=['POST'])
@@ -95,12 +99,34 @@ def ajouteFrisePerso():
     nom = request.form.get('nom')
     insertListe(nom, session["usernameId"])
     return make_response(jsonify({"message": "Login successful"}), 200)  
-# Gestion des connexions 
 
+
+@app.route('/frisePerso/print',methods=['POST'])
+def printListePerso():
+    idListeperso = request.form.get("idFrisePerso")
+    if 'username' in session:
+        today = datetime.now()
+        seven_days_ago = (today - timedelta(days=7)).strftime('%Y-%m-%d') 
+        today = today.strftime('%Y-%m-%d')
+        listePersos = getListes(session['usernameId'])
+        return render_template('pages/articles.html',articles=getArticlesListePerso(idListeperso,seven_days_ago,today),listesPersos = listePersos)
+    else:
+        servIndex()
 @app.route('/logout', methods=['POST'])
 def logout():
     session.pop('username', None)
-    return make_response(jsonify({"message": "Logout successful"}), 200)  
+    return make_response(jsonify({"message": "Logout successful"}), 200)
+@app.route('/add/article/perso',methods=['POST'])
+def addArticlePerso():
+    listePersoId = request.form.get("listepersoid")
+    articleId = request.form.get("articleid")
+    print(listePersoId)
+    print(articleId)
+    if addArticleListePerso(listePersoId,articleId) is True:
+        return make_response(jsonify({"message": "L'article a bien été rajouté dans la liste perso."}), 200)  
+    else:
+        return make_response(jsonify({"message": "Une erreur est survenue lors de l'ajout de l'article dans la liste perso. "}), 403)  
+
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':

@@ -39,7 +39,7 @@ function getDataFromFrise(friseId) {
                     idBdd: element.id,
                 });
             });
-
+            console.log(data);
             var options = {
             };
 
@@ -213,6 +213,24 @@ $(document).ready(function () {
             }
         });
     });
+    $(document).on("click",".btn-ajouter-article-liste",function(){
+        let listepersoid = $(this).data("listeid");
+        let articleid = $(this).data("articleid");
+        $.ajax({
+            url: "http://127.0.0.1:5000/add/article/perso",
+            type:"POST",
+            data:{
+                listepersoid : listepersoid,
+                articleid: articleid
+            },
+            success: function success(response){
+                console.log("test");
+            },
+            error: function error(xhr,status,error){
+                console.log("ERROER");
+            }
+        })
+    })
 
     $(document).on("click", "#btn-ajout-frise-item", function () {
         let date = $('#date-value').val();
@@ -240,20 +258,28 @@ $(document).ready(function () {
             console.error("Veuillez remplir tous les champs.");
         }
     });
-    $(document).on("click", ".btn-affiche-perso", function () {
+    $(document).on("click", ".btn-afficher-perso", function () {
         persoId = $(this).val();
         console.log(persoId);
+        $.ajax({
+            url: "http://127.0.0.1:5000/frisePerso/print",
+            type: "POST",
+            data: {
+                idFrisePerso: persoId,
+            },
+            success: function success(response){
+                $('#super-container').html(response);
+            },
+            error: function error(xhr, status , error){
+                console.log("erreur affiche liste peso");
+            }
+        })
     });
     $(document).on("click", ".btn-supprimer-perso", function () {
         persoId = $(this).val();
         console.log(persoId);
-    })
-    var myModal = document.getElementById('exampleModalCenter')
-    var myInput = document.getElementById('myInput')
-
-    myModal.addEventListener('shown.bs.modal', function () {
-        myInput.focus();
     });
+
     /*$(".generateSubDomain").on("click", function() {
         companyName = $(this).val()
         $.ajax({

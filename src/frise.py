@@ -45,12 +45,13 @@ def getItemFrise(friseid):
     try:
         connection = connectDatabase()
         cursor = connection.cursor(dictionary=True)
-
+        item = []
         query = "SELECT * FROM linkFrise WHERE id_frise = %s"
         cursor.execute(query, (friseid,))
         results = cursor.fetchall()
+        for row in results:
 
-        item = [{"id": row["id"], "valeur": row["valeur"], "date": row["date"]} for row in results]
+            item.append({"id": row["id"], "valeur": row["valeur"], "date": row["date_publi"]})
         return item
     except Exception as e:
         print(f"Erreur : {e}")
